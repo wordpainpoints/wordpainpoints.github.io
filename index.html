@@ -56,11 +56,11 @@
         .chart-container {
             position: relative;
             width: 100%;
-            max-width: 400px;
+            max-width: 380px;
             margin-left: auto;
             margin-right: auto;
             height: auto;
-            max-height: 400px;
+            max-height: 380px;
         }
     </style>
 </head>
@@ -69,14 +69,15 @@
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
 
         <header class="text-center mb-10 md:mb-16">
-            <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-2">Das Word-Dilemma im Studium</h1>
-            <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">Eine interaktive Analyse der häufigsten Pain Points für Studierende und Forschende</p>
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-800 mb-2">Das Word-Dilemma im Studium</h1>
+            <p class="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">Eine interaktive Analyse der häufigsten Pain Points für Studierende und Forschende</p>
         </header>
 
         <section id="intro" class="mb-12 md:mb-16">
             <div class="max-w-4xl mx-auto bg-white p-6 md:p-8 rounded-xl shadow-sm border border-gray-200">
-                <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
-                    <span class="text-2xl mr-3">🎯</span> Das Kernproblem: Design vs. Anforderung
+                <h2 class="text-xl sm:text-2xl font-bold text-gray-800 mb-4 flex items-start sm:items-center">
+                    <span class="text-2xl mr-3 pt-1 sm:pt-0">🎯</span>
+                    <span>Das Kernproblem: Design vs. Anforderung</span>
                 </h2>
                 <p class="text-gray-700 leading-relaxed">
                     Microsoft Word ist das Standardwerkzeug für akademische Texte, doch seine Designphilosophie kollidiert fundamental mit den Anforderungen des wissenschaftlichen Arbeitens. Präzision, Stabilität bei langen Texten und konsistente Formatierung sind entscheidend, aber genau hier liegen die größten Schwachstellen. Diese interaktive Analyse beleuchtet die vier zentralen Problemfelder, die bei Studierenden und Forschenden für Frustration sorgen, und erklärt deren Ursachen.
@@ -85,14 +86,14 @@
         </section>
 
         <section id="dashboard" class="mb-12 md:mb-16">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12 items-center">
-                <div class="lg:col-span-1">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center lg:text-left">Visuelle Übersicht der Pain Points</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 md:gap-12 items-center">
+                <div class="lg:col-span-2">
+                    <h2 class="text-xl sm:text-2xl font-bold text-gray-800 mb-4 text-center lg:text-left">Visuelle Übersicht der Pain Points</h2>
                     <p class="text-gray-600 mb-6 text-center lg:text-left">
-                        Die Frustration im Umgang mit Word lässt sich in vier Hauptkategorien einteilen. Klicken Sie auf einen Bereich im Diagramm, um direkt zu den detaillierten Problemen und deren Ursachen zu springen. Die Größe der Segmente repräsentiert die gefühlte Häufigkeit und Schwere der Probleme.
+                        Die Frustration im Umgang mit Word lässt sich in vier Hauptkategorien einteilen. Klicken Sie auf einen Bereich im Diagramm, um direkt zu den detaillierten Problemen und deren Ursachen zu springen.
                     </p>
                 </div>
-                <div class="lg:col-span-2">
+                <div class="lg:col-span-3">
                     <div class="chart-container">
                         <canvas id="painPointChart"></canvas>
                     </div>
@@ -102,11 +103,11 @@
 
         <main id="main-content">
             <div class="border-b border-gray-200 mb-8">
-                <nav class="-mb-px flex justify-center space-x-4 md:space-x-8" aria-label="Tabs">
-                    <button id="nav-format" class="nav-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm md:text-base active">Formatierung & Layout</button>
-                    <button id="nav-stabilitat" class="nav-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm md:text-base">Stabilität & Performance</button>
-                    <button id="nav-quellen" class="nav-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm md:text-base">Quellen & Verzeichnisse</button>
-                    <button id="nav-kollaboration" class="nav-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm md:text-base">Zusammenarbeit</button>
+                <nav class="-mb-px flex flex-wrap justify-center gap-x-4 gap-y-2 sm:gap-x-8" aria-label="Tabs">
+                    <button id="nav-format" class="nav-button whitespace-nowrap pb-2 pt-1 px-1 font-medium text-sm sm:text-base active">Formatierung & Layout</button>
+                    <button id="nav-stabilitat" class="nav-button whitespace-nowrap pb-2 pt-1 px-1 font-medium text-sm sm:text-base">Stabilität & Performance</button>
+                    <button id="nav-quellen" class="nav-button whitespace-nowrap pb-2 pt-1 px-1 font-medium text-sm sm:text-base">Quellen & Verzeichnisse</button>
+                    <button id="nav-kollaboration" class="nav-button whitespace-nowrap pb-2 pt-1 px-1 font-medium text-sm sm:text-base">Zusammenarbeit</button>
                 </nav>
             </div>
 
@@ -169,7 +170,7 @@
                 'Quellen & Verzeichnisse': {
                     id: 'quellen',
                     title: 'Quellen & Verzeichnisse',
-                    icon: '📚',
+                    icon: '�',
                     summary: 'Die native Literaturverwaltung ist unzureichend, und "automatische" Verzeichnisse müssen manuell aktualisiert werden, was eine häufige Fehlerquelle darstellt.',
                     details: [
                         {
@@ -215,13 +216,13 @@
             
             function createAccordionItem(item) {
                 const wrapper = document.createElement('div');
-                wrapper.className = 'border-b border-gray-200';
+                wrapper.className = 'border-b border-gray-200 last:border-b-0';
 
                 const header = document.createElement('div');
                 header.className = 'accordion-header flex justify-between items-center p-4';
                 header.innerHTML = `
-                    <h4 class="font-semibold text-gray-800">${item.title}</h4>
-                    <span class="transform transition-transform duration-300">
+                    <h4 class="font-semibold text-gray-800 pr-4">${item.title}</h4>
+                    <span class="transform transition-transform duration-300 flex-shrink-0">
                         <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </span>
                 `;
@@ -235,16 +236,26 @@
 
                 header.addEventListener('click', () => {
                     const isOpen = content.style.maxHeight;
-                    document.querySelectorAll('.accordion-content').forEach(el => {
-                        el.style.maxHeight = null;
-                        el.style.paddingTop = null;
-                        el.style.paddingBottom = null;
+                    const allContents = document.querySelectorAll('.accordion-content');
+                    const allHeaders = document.querySelectorAll('.accordion-header span');
+
+                    allContents.forEach(el => {
+                        if (el !== content) {
+                           el.style.maxHeight = null;
+                        }
                     });
-                    document.querySelectorAll('.accordion-header span').forEach(el => el.classList.remove('rotate-180'));
+                     allHeaders.forEach(el => {
+                        if (el !== header.querySelector('span')) {
+                           el.classList.remove('rotate-180');
+                        }
+                    });
                     
                     if (!isOpen || isOpen === '0px') {
                         content.style.maxHeight = content.scrollHeight + "px";
                         header.querySelector('span').classList.add('rotate-180');
+                    } else {
+                        content.style.maxHeight = null;
+                        header.querySelector('span').classList.remove('rotate-180');
                     }
                 });
 
@@ -258,14 +269,14 @@
                 contentContainer.innerHTML = '';
                 const section = document.createElement('div');
                 section.id = `content-${data.id}`;
-                section.className = 'card p-6 md:p-8';
+                section.className = 'card p-4 sm:p-6 md:p-8';
 
                 let contentHTML = `
                     <div class="flex items-start mb-4">
                         <span class="text-3xl mr-4">${data.icon}</span>
                         <div>
-                            <h3 class="text-xl md:text-2xl font-bold text-gray-900">${data.title}</h3>
-                            <p class="text-gray-600 mt-1">${data.summary}</p>
+                            <h3 class="text-lg sm:text-xl md:text-2xl font-bold text-gray-900">${data.title}</h3>
+                            <p class="text-gray-600 mt-1 text-sm sm:text-base">${data.summary}</p>
                         </div>
                     </div>
                     <div class="mt-6 border-t border-gray-200">`;
@@ -331,7 +342,8 @@
                     cutout: '60%',
                     plugins: {
                         legend: {
-                            position: 'bottom',
+                            display: window.innerWidth >= 640,
+                            position: 'right',
                             labels: {
                                 color: '#4A4A4A',
                                 font: {
@@ -356,9 +368,16 @@
                             const category = Object.values(painPointData)[elementIndex];
                             updateActiveTab(category.id);
                             highlightChartSegment(elementIndex);
-                            document.getElementById(`content-${category.id}`).scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            document.getElementById('main-content').scrollIntoView({ behavior: 'smooth', block: 'start' });
                         }
                     }
+                }
+            });
+            
+            window.addEventListener('resize', () => {
+                if(chartInstance) {
+                    chartInstance.options.plugins.legend.display = window.innerWidth >= 640;
+                    chartInstance.update();
                 }
             });
 
@@ -369,3 +388,4 @@
 
 </body>
 </html>
+�
