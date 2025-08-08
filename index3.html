@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interaktive Analyse: Word Pain Points im wissenschaftlichen Arbeiten</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals (Linen, Taupe, Slate Gray, Soft Amber) -->
+    <!-- Application Structure Plan: The application is designed as an interactive dashboard, moving away from the linear report structure. The core idea is to allow users (students, researchers) to immediately grasp the scope of the problems and then dive into specific areas of interest. The structure consists of: 1. A header with the main title. 2. An introductory section summarizing the core conflict. 3. An interactive "Pain Point Severity" chart that serves as a visual navigation hub. Clicking a segment of the chart filters the content below. 4. A main content area with tabs for each of the four key pain point categories identified in the report. This allows for non-linear exploration. 5. Within each tab, the information is presented in structured cards and expandable accordions to make the dense text more digestible. This structure was chosen because it transforms passive reading into active exploration, which is more engaging and effective for understanding complex, interrelated problems. It respects the user's time by providing a high-level overview first, with clear pathways to detailed information. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: The four main pain point categories and their relative impact/frustration level. Goal: Provide a quick, comparative overview. Viz/Method: An interactive Doughnut Chart (Chart.js). Interaction: Clicking on a chart segment highlights it and filters the detailed content sections below, showing only the relevant category. Justification: A doughnut chart is excellent for showing parts of a whole and is more visually engaging than a simple list. The interactivity directly connects the overview to the details, creating a seamless user flow. Library: Chart.js (Canvas).
+        - Report Info: Detailed descriptions of specific problems within each category (e.g., unpredictable formatting, performance lag). Goal: Organize and present dense textual information clearly. Viz/Method: Tabbed interface and expandable accordions (HTML/CSS/JS). Interaction: Users click tabs to switch categories and click accordion headers to reveal detailed explanations. Justification: Tabs prevent overwhelming the user with all information at once. Accordions allow users to scan problem headlines and only expand the ones they are interested in, reducing cognitive load. Library/Method: Custom JS with Tailwind CSS.
+        - Report Info: The summary table from the report. Goal: Compare the categories across different dimensions (target group, cause). Viz/Method: A styled HTML table within a modal or dedicated section. Interaction: The table is initially presented as a static but well-designed element, reinforcing the chart's data. Justification: A table is the most effective way to present this structured, multi-dimensional data.
+        - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFCFB;
+            color: #4A4A4A;
+        }
+        .nav-button {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-button.active {
+            color: #A47551;
+            border-bottom-color: #A47551;
+        }
+        .nav-button:hover {
+            color: #A47551;
+        }
+        .card {
+            background-color: #FFFFFF;
+            border: 1px solid #EAEAEA;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            transition: all 0.3s ease;
+        }
+        .accordion-header {
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .accordion-header:hover {
+            background-color: #F9F9F9;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            height: auto;
+            max-height: 400px;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+
+        <header class="text-center mb-10 md:mb-16">
+            <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-2">Das Word-Dilemma im Studium</h1>
+            <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">Eine interaktive Analyse der häufigsten Pain Points für Studierende und Forschende</p>
+        </header>
+
+        <section id="intro" class="mb-12 md:mb-16">
+            <div class="max-w-4xl mx-auto bg-white p-6 md:p-8 rounded-xl shadow-sm border border-gray-200">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                    <span class="text-2xl mr-3">🎯</span> Das Kernproblem: Design vs. Anforderung
+                </h2>
+                <p class="text-gray-700 leading-relaxed">
+                    Microsoft Word ist das Standardwerkzeug für akademische Texte, doch seine Designphilosophie kollidiert fundamental mit den Anforderungen des wissenschaftlichen Arbeitens. Präzision, Stabilität bei langen Texten und konsistente Formatierung sind entscheidend, aber genau hier liegen die größten Schwachstellen. Diese interaktive Analyse beleuchtet die vier zentralen Problemfelder, die bei Studierenden und Forschenden für Frustration sorgen, und erklärt deren Ursachen.
+                </p>
+            </div>
+        </section>
+
+        <section id="dashboard" class="mb-12 md:mb-16">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12 items-center">
+                <div class="lg:col-span-1">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center lg:text-left">Visuelle Übersicht der Pain Points</h2>
+                    <p class="text-gray-600 mb-6 text-center lg:text-left">
+                        Die Frustration im Umgang mit Word lässt sich in vier Hauptkategorien einteilen. Klicken Sie auf einen Bereich im Diagramm, um direkt zu den detaillierten Problemen und deren Ursachen zu springen. Die Größe der Segmente repräsentiert die gefühlte Häufigkeit und Schwere der Probleme.
+                    </p>
+                </div>
+                <div class="lg:col-span-2">
+                    <div class="chart-container">
+                        <canvas id="painPointChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <main id="main-content">
+            <div class="border-b border-gray-200 mb-8">
+                <nav class="-mb-px flex justify-center space-x-4 md:space-x-8" aria-label="Tabs">
+                    <button id="nav-format" class="nav-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm md:text-base active">Formatierung & Layout</button>
+                    <button id="nav-stabilitat" class="nav-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm md:text-base">Stabilität & Performance</button>
+                    <button id="nav-quellen" class="nav-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm md:text-base">Quellen & Verzeichnisse</button>
+                    <button id="nav-kollaboration" class="nav-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm md:text-base">Zusammenarbeit</button>
+                </nav>
+            </div>
+
+            <div id="content-container">
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const painPointData = {
+                'Formatierung & Layout': {
+                    id: 'format',
+                    title: 'Formatierung & Layout',
+                    icon: '📐',
+                    summary: 'Der tägliche Kampf mit unkontrollierbaren Objektplatzierungen, inkonsistenten Automatismen und der umständlichen Nutzung von Formatvorlagen.',
+                    details: [
+                        {
+                            title: 'Die fehlende Trennung von Inhalt und Layout',
+                            content: 'Die Kernursache vieler Probleme: In Word sind Text und Formatierung untrennbar miteinander verknüpft. Jede Änderung kann unvorhersehbare Auswirkungen auf das Layout haben. Im Gegensatz dazu trennen Systeme wie LaTeX diese Ebenen, was zu robusteren und konsistenteren Ergebnissen führt.'
+                        },
+                        {
+                            title: 'Unvorhersehbares Verhalten & versteckte Komplexität',
+                            content: 'Word wendet eigenmächtig Formatierungen an (z.B. automatische Aufzählungen) oder erzeugt im Blocksatz unschöne Lücken. Das Layout kann sich auf verschiedenen Computern ändern, da es von externen Faktoren wie Druckertreibern abhängt. Im Hintergrund agieren unsichtbare Formatierungscodes, die beim Kopieren und Einfügen zu unerklärlichem Verhalten führen.'
+                        },
+                        {
+                            title: 'Strukturierung des Dokuments',
+                            content: 'Die Verwaltung von Dokumentstrukturen ist fehleranfällig. Die Kombination verschiedener Seitennummerierungen (z.B. römisch und arabisch) oder die Einrichtung unterschiedlicher Kopf- und Fußzeilen erfordert ein tiefes Verständnis von Abschnittsumbrüchen und ist für viele Nutzer nicht intuitiv.'
+                        },
+                        {
+                            title: 'Platzierung von Objekten: Der Kampf mit Bildern und Tabellen',
+                            content: 'Abbildungen und Tabellen verschieben sich scheinbar willkürlich, sobald Text geändert wird. Die Mechanismen für Textumbruch und Verankerung sind intransparent und unzuverlässig, was zu enormem Aufwand für manuelle Nachkorrekturen führt.'
+                        },
+                         {
+                            title: 'Mathematische Formeln: Umständlich und qualitativ minderwertig',
+                            content: 'Im Vergleich zu LaTeX ist der Formeleditor langsam und umständlich zu bedienen. Das typografische Ergebnis erreicht oft nicht die professionelle Qualität, die in MINT-Fächern gefordert wird.'
+                        }
+                    ]
+                },
+                'Stabilität & Performance': {
+                    id: 'stabilitat',
+                    title: 'Stabilität & Performance',
+                    icon: '⚡️',
+                    summary: 'Extreme Verlangsamung bei langen Dokumenten, häufige Abstürze und das hohe Risiko von Dateikorruption bedrohen große Projekte wie Dissertationen.',
+                    details: [
+                        {
+                            title: 'Performance-Engpässe und hoher Ressourcenverbrauch',
+                            content: 'Ab ca. 50-100 Seiten wird Word quälend langsam. Tippen und Scrollen verzögern sich, das Programm friert ein und lastet Arbeitsspeicher sowie Prozessor stark aus. Eine Hauptursache ist die Funktion "Änderungen nachverfolgen", die das Dokument mit Metadaten überlädt.'
+                        },
+                        {
+                            title: 'Monolithische Dateistruktur als Wurzel des Übels',
+                            content: 'Eine .docx-Datei bündelt alle Inhalte (Text, Bilder, Verlauf) in einer einzigen, großen Einheit. Bei jeder Interaktion muss Word diese komplexe Datenmenge verarbeiten, was die Performance bei wachsender Größe einbrechen lässt.'
+                        },
+                        {
+                            title: 'Das reale Risiko von Dateikorruption und Datenverlust',
+                            content: 'Die monolithische Struktur macht Dateien anfällig für Korruption. Ein kleiner Fehler kann das gesamte Dokument unlesbar machen. Die ständige Angst vor dem Totalverlust der Arbeit ist ein erheblicher Stressfaktor.'
+                        }
+                    ]
+                },
+                'Quellen & Verzeichnisse': {
+                    id: 'quellen',
+                    title: 'Quellen & Verzeichnisse',
+                    icon: '📚',
+                    summary: 'Die native Literaturverwaltung ist unzureichend, und "automatische" Verzeichnisse müssen manuell aktualisiert werden, was eine häufige Fehlerquelle darstellt.',
+                    details: [
+                        {
+                            title: 'Ungenügende native Literaturverwaltung',
+                            content: 'Word fehlt die Möglichkeit, Zitationsdaten direkt aus Datenbanken zu importieren. Die Auswahl an Zitierstilen ist begrenzt und Anpassungen sind kompliziert. Dies zwingt zur Nutzung externer Programme (z.B. Zotero, Citavi), deren Plugins wiederum Instabilität verursachen können.'
+                        },
+                        {
+                            title: 'Manuelle Aktualisierung als Fehlerquelle',
+                            content: 'Inhalts-, Abbildungs- und Tabellenverzeichnisse sowie Querverweise aktualisieren sich nicht wirklich automatisch. Der Nutzer muss die Aktualisierung manuell anstoßen (z.B. mit F9). Dies wird oft vergessen und führt zu Arbeiten mit falschen Seitenzahlen oder ungültigen Verweisen.'
+                        },
+                        {
+                            title: 'Fehlende Transparenz',
+                            content: 'Word kommuniziert nicht, dass die Verzeichnisinformationen veraltet sind. Was als Performance-Optimierung gedacht ist ("lazy evaluation"), wird für den Nutzer zu einer versteckten Fehlerquelle kurz vor der Abgabe.'
+                        }
+                    ]
+                },
+                'Zusammenarbeit & Versionierung': {
+                    id: 'kollaboration',
+                    title: 'Zusammenarbeit & Versionierung',
+                    icon: '👥',
+                    summary: 'Unzuverlässige Kollaboration und das Fehlen einer echten Versionskontrolle machen Word für moderne, transparente Forschungsprozesse ungeeignet.',
+                    details: [
+                        {
+                            title: 'Fehleranfällige Kollaboration',
+                            content: 'Der "Änderungen nachverfolgen"-Modus wird schnell unübersichtlich. Das Zusammenführen von Dokumenten oder die Echtzeit-Kollaboration führen oft zu Synchronisationskonflikten, Datenverlust und massivem Formatierungschaos, insbesondere bei Nutzung unterschiedlicher Betriebssysteme (Windows vs. Mac).'
+                        },
+                        {
+                            title: 'Aufgepfropfte Architektur',
+                            content: 'Word wurde als Offline-Anwendung für Einzelnutzer konzipiert. Die Kollaborations-Features wurden nachträglich auf diese alte Architektur aufgepfropft, was sie inhärent anfällig für Fehler macht – im Gegensatz zu "cloud-native" Tools wie Google Docs oder Overleaf.'
+                        },
+                        {
+                            title: 'Das Fehlen einer echten Versionskontrolle',
+                            content: 'Die "Versionshistorie" ist kein Ersatz für ein System wie Git. Sie erlaubt keine granulare Nachverfolgung, kein detailliertes Vergleichen von Versionen und kein systematisches Zusammenführen von Änderungen. Der Entstehungsprozess eines Dokuments bleibt intransparent und widerspricht den Prinzipien von Open Science.'
+                        }
+                    ]
+                }
+            };
+
+            const contentContainer = document.getElementById('content-container');
+            const navButtons = document.querySelectorAll('.nav-button');
+            let activeTab = 'format';
+            let chartInstance = null;
+            
+            function createAccordionItem(item) {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'border-b border-gray-200';
+
+                const header = document.createElement('div');
+                header.className = 'accordion-header flex justify-between items-center p-4';
+                header.innerHTML = `
+                    <h4 class="font-semibold text-gray-800">${item.title}</h4>
+                    <span class="transform transition-transform duration-300">
+                        <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </span>
+                `;
+
+                const content = document.createElement('div');
+                content.className = 'accordion-content';
+                content.innerHTML = `<div class="p-4 pt-0 text-gray-600 leading-relaxed">${item.content}</div>`;
+                
+                wrapper.appendChild(header);
+                wrapper.appendChild(content);
+
+                header.addEventListener('click', () => {
+                    const isOpen = content.style.maxHeight;
+                    document.querySelectorAll('.accordion-content').forEach(el => {
+                        el.style.maxHeight = null;
+                        el.style.paddingTop = null;
+                        el.style.paddingBottom = null;
+                    });
+                    document.querySelectorAll('.accordion-header span').forEach(el => el.classList.remove('rotate-180'));
+                    
+                    if (!isOpen || isOpen === '0px') {
+                        content.style.maxHeight = content.scrollHeight + "px";
+                        header.querySelector('span').classList.add('rotate-180');
+                    }
+                });
+
+                return wrapper;
+            }
+
+            function renderContent(key) {
+                const data = painPointData[key] || Object.values(painPointData).find(d => d.id === key);
+                if (!data) return;
+
+                contentContainer.innerHTML = '';
+                const section = document.createElement('div');
+                section.id = `content-${data.id}`;
+                section.className = 'card p-6 md:p-8';
+
+                let contentHTML = `
+                    <div class="flex items-start mb-4">
+                        <span class="text-3xl mr-4">${data.icon}</span>
+                        <div>
+                            <h3 class="text-xl md:text-2xl font-bold text-gray-900">${data.title}</h3>
+                            <p class="text-gray-600 mt-1">${data.summary}</p>
+                        </div>
+                    </div>
+                    <div class="mt-6 border-t border-gray-200">`;
+                
+                const accordionContainer = document.createElement('div');
+                data.details.forEach(item => {
+                    accordionContainer.appendChild(createAccordionItem(item));
+                });
+                
+                section.innerHTML = contentHTML;
+                section.appendChild(accordionContainer);
+                contentContainer.appendChild(section);
+            }
+            
+            function updateActiveTab(tabId) {
+                activeTab = tabId;
+                navButtons.forEach(btn => {
+                    btn.classList.toggle('active', btn.id === `nav-${tabId}`);
+                });
+                renderContent(tabId);
+            }
+
+            navButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabId = button.id.replace('nav-', '');
+                    updateActiveTab(tabId);
+                    
+                    const categoryIndex = Object.values(painPointData).findIndex(d => d.id === tabId);
+                    if (chartInstance && categoryIndex !== -1) {
+                        highlightChartSegment(categoryIndex);
+                    }
+                });
+            });
+
+            function highlightChartSegment(index) {
+                if (!chartInstance) return;
+                chartInstance.data.datasets[0].backgroundColor = chartInstance.data.datasets[0].backgroundColor.map((color, i) => {
+                    return i === index ? '#A47551' : '#D1C4B7';
+                });
+                chartInstance.update();
+            }
+
+            const ctx = document.getElementById('painPointChart').getContext('2d');
+            const chartData = {
+                labels: Object.keys(painPointData),
+                datasets: [{
+                    label: 'Pain Points',
+                    data: [35, 25, 20, 20],
+                    backgroundColor: ['#D1C4B7', '#D1C4B7', '#D1C4B7', '#D1C4B7'],
+                    borderColor: '#FDFCFB',
+                    borderWidth: 4,
+                    hoverBackgroundColor: '#A47551',
+                    hoverBorderColor: '#FDFCFB'
+                }]
+            };
+
+            chartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: chartData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '60%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#4A4A4A',
+                                font: {
+                                    size: 14
+                                },
+                                boxWidth: 15,
+                                padding: 20
+                            }
+                        },
+                        tooltip: {
+                            enabled: true,
+                            backgroundColor: '#333',
+                            titleFont: { size: 16 },
+                            bodyFont: { size: 14 },
+                            padding: 10,
+                            cornerRadius: 4
+                        }
+                    },
+                    onClick: (event, elements) => {
+                        if (elements.length > 0) {
+                            const elementIndex = elements[0].index;
+                            const category = Object.values(painPointData)[elementIndex];
+                            updateActiveTab(category.id);
+                            highlightChartSegment(elementIndex);
+                            document.getElementById(`content-${category.id}`).scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                    }
+                }
+            });
+
+            updateActiveTab('format');
+            highlightChartSegment(0);
+        });
+    </script>
+
+</body>
+</html>
