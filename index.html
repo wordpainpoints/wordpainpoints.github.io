@@ -107,7 +107,7 @@
                     <button id="nav-format" class="nav-button whitespace-nowrap pb-2 pt-1 px-1 font-medium text-sm sm:text-base active">Formatierung & Layout</button>
                     <button id="nav-stabilitat" class="nav-button whitespace-nowrap pb-2 pt-1 px-1 font-medium text-sm sm:text-base">Stabilität & Performance</button>
                     <button id="nav-quellen" class="nav-button whitespace-nowrap pb-2 pt-1 px-1 font-medium text-sm sm:text-base">Quellen & Verzeichnisse</button>
-                    <button id="nav-kollaboration" class="nav-button whitespace-nowrap pb-2 pt-1 px-1 font-medium text-sm sm:text-base">Zusammenarbeit</button>
+                    <button id="nav-kollaboration" class="nav-button whitespace-nowrap pb-2 pt-1 px-1 font-medium text-sm sm:text-base">Zusammenarbeit & Versionen</button>
                 </nav>
             </div>
 
@@ -151,26 +151,18 @@
                     id: 'stabilitat',
                     title: 'Stabilität & Performance',
                     icon: '⚡️',
-                    summary: 'Extreme Verlangsamung bei langen Dokumenten, häufige Abstürze und das hohe Risiko von Dateikorruption bedrohen große Projekte wie Dissertationen.',
+                    summary: 'Das hohe Risiko von Dateikorruption und plötzlichem Datenverlust durch Abstürze bedroht große Projekte wie Dissertationen.',
                     details: [
                         {
-                            title: 'Performance-Engpässe und hoher Ressourcenverbrauch',
-                            content: 'Ab ca. 50-100 Seiten wird Word quälend langsam. Tippen und Scrollen verzögern sich, das Programm friert ein und lastet Arbeitsspeicher sowie Prozessor stark aus. Eine Hauptursache ist die Funktion "Änderungen nachverfolgen", die das Dokument mit Metadaten überlädt.'
-                        },
-                        {
-                            title: 'Monolithische Dateistruktur als Wurzel des Übels',
-                            content: 'Eine .docx-Datei bündelt alle Inhalte (Text, Bilder, Verlauf) in einer einzigen, großen Einheit. Bei jeder Interaktion muss Word diese komplexe Datenmenge verarbeiten, was die Performance bei wachsender Größe einbrechen lässt.'
-                        },
-                        {
-                            title: 'Das reale Risiko von Dateikorruption und Datenverlust',
-                            content: 'Die monolithische Struktur macht Dateien anfällig für Korruption. Ein kleiner Fehler kann das gesamte Dokument unlesbar machen. Die ständige Angst vor dem Totalverlust der Arbeit ist ein erheblicher Stressfaktor.'
+                            title: 'Risiko von Dateikorruption und Datenverlust',
+                            content: 'Die monolithische Dateistruktur von Word macht Dateien anfällig für Korruption. Ein kleiner Fehler kann das gesamte Dokument unlesbar machen. Die ständige Angst vor dem Totalverlust der Arbeit durch Abstürze oder beschädigte Dateien ist ein erheblicher Stressfaktor und ein inakzeptables Risiko für wichtige wissenschaftliche Arbeiten.'
                         }
                     ]
                 },
                 'Quellen & Verzeichnisse': {
                     id: 'quellen',
                     title: 'Quellen & Verzeichnisse',
-                    icon: '�',
+                    icon: '📚',
                     summary: 'Die native Literaturverwaltung ist unzureichend, und "automatische" Verzeichnisse müssen manuell aktualisiert werden, was eine häufige Fehlerquelle darstellt.',
                     details: [
                         {
@@ -187,7 +179,7 @@
                         }
                     ]
                 },
-                'Zusammenarbeit & Versionierung': {
+                'Zusammenarbeit & Versionen': {
                     id: 'kollaboration',
                     title: 'Zusammenarbeit & Versionierung',
                     icon: '👥',
@@ -304,7 +296,7 @@
                     const tabId = button.id.replace('nav-', '');
                     updateActiveTab(tabId);
                     
-                    const categoryIndex = Object.values(painPointData).findIndex(d => d.id === tabId);
+                    const categoryIndex = Object.keys(painPointData).findIndex(k => painPointData[k].id === tabId);
                     if (chartInstance && categoryIndex !== -1) {
                         highlightChartSegment(categoryIndex);
                     }
@@ -321,10 +313,15 @@
 
             const ctx = document.getElementById('painPointChart').getContext('2d');
             const chartData = {
-                labels: Object.keys(painPointData),
+                labels: [
+                    'Formatierung & Layout',
+                    'Stabilität & Performance',
+                    'Quellen & Verzeichnisse',
+                    'Zusammenarbeit & Versionen'
+                ],
                 datasets: [{
                     label: 'Pain Points',
-                    data: [35, 25, 20, 20],
+                    data: [35, 30, 15, 20],
                     backgroundColor: ['#D1C4B7', '#D1C4B7', '#D1C4B7', '#D1C4B7'],
                     borderColor: '#FDFCFB',
                     borderWidth: 4,
@@ -342,7 +339,7 @@
                     cutout: '60%',
                     plugins: {
                         legend: {
-                            display: window.innerWidth >= 640,
+                            display: window.innerWidth >= 768,
                             position: 'right',
                             labels: {
                                 color: '#4A4A4A',
@@ -350,8 +347,8 @@
                                     size: 14
                                 },
                                 boxWidth: 15,
-                                padding: 20
-                            }
+                                padding: 20,
+                            },
                         },
                         tooltip: {
                             enabled: true,
@@ -365,7 +362,8 @@
                     onClick: (event, elements) => {
                         if (elements.length > 0) {
                             const elementIndex = elements[0].index;
-                            const category = Object.values(painPointData)[elementIndex];
+                            const categoryKey = Object.keys(painPointData)[elementIndex];
+                            const category = painPointData[categoryKey];
                             updateActiveTab(category.id);
                             highlightChartSegment(elementIndex);
                             document.getElementById('main-content').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -376,7 +374,7 @@
             
             window.addEventListener('resize', () => {
                 if(chartInstance) {
-                    chartInstance.options.plugins.legend.display = window.innerWidth >= 640;
+                    chartInstance.options.plugins.legend.display = window.innerWidth >= 768;
                     chartInstance.update();
                 }
             });
@@ -388,4 +386,3 @@
 
 </body>
 </html>
-�
